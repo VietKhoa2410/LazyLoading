@@ -30,9 +30,9 @@ public class ShopController {
   }
 
   @GetMapping("{id}")
-  public String getShop(@PathVariable Long id) throws NotFoundException {
+  public ShopEntity getShop(@PathVariable Long id) throws NotFoundException {
     ShopEntity rs = shopService.findById(id);
-    return rs.getName();
+    return rs;
   }
 
   @ExceptionHandler(NotFoundException.class)
