@@ -3,7 +3,6 @@ package com.example.lazyloading.model.product.service;
 import com.example.lazyloading.model.product.entity.ProductEntity;
 import com.example.lazyloading.model.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
