@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 
 @Service
@@ -38,5 +39,9 @@ public class ShopService {
 
 	public ShopInfo findInfoById(Long id) throws EntityNotFoundException {
 		return shopRepository.findInfoById(id);
+	}
+
+	public List<ShopEntity> findByNameLike(String name){
+		return shopRepository.findByNameContains(name);
 	}
 }
