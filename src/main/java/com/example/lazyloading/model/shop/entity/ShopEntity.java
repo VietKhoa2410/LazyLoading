@@ -10,7 +10,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "shop")
@@ -31,13 +30,11 @@ public class ShopEntity {
 	@CreatedDate
 	private ZonedDateTime createdAt;
 
-//	@Builder.Default
+	@Builder.Default
 	@OneToMany(mappedBy = ProductEntity.Fields.shop, fetch = FetchType.LAZY)
-	private List<ProductEntity> products ;
+	private List<ProductEntity> products = new ArrayList<>();
 
 	public void addProduct(ProductEntity product){
-		if(Objects.isNull(products))
-			products = new ArrayList<>();
 		products.add(product);
 		product.setShop(this);
 	}
