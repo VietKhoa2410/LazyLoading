@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityNotFoundException;
@@ -35,8 +36,13 @@ public class ShopController {
   }
 
   @GetMapping("{id}/info")
-  public ShopInfo getShopInfoV2(@PathVariable Long id) throws EntityNotFoundException {
+  public ShopInfo getShopInfo(@PathVariable Long id) throws EntityNotFoundException {
     return shopService.findInfoById(id);
+  }
+
+  @GetMapping
+  public Long getIdByName(@RequestParam String name){
+    return shopService.findByName(name).getId();
   }
 
   @ExceptionHandler(EntityNotFoundException.class)

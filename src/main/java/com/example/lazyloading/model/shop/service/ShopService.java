@@ -1,5 +1,7 @@
 package com.example.lazyloading.model.shop.service;
 
+import com.example.lazyloading.model.employee.dto.CreateEmployeeRequest;
+import com.example.lazyloading.model.employee.entity.EmployeeEntity;
 import com.example.lazyloading.model.product.dto.CreateProductRequest;
 import com.example.lazyloading.model.product.entity.ProductEntity;
 import com.example.lazyloading.model.shop.dto.CreateShopRequest;
@@ -30,6 +32,17 @@ public class ShopService {
 					.build()
 			);
 		}
+
+		for (CreateEmployeeRequest createEmployeeRequest : createShopRequest.getEmployees()){
+			shopEntity.addEmployee(
+				EmployeeEntity.builder()
+					.name(createEmployeeRequest.getName())
+					.address(createEmployeeRequest.getAddress())
+					.dob(createEmployeeRequest.getDob())
+					.build()
+			);
+		}
+
 		shopRepository.save(shopEntity);
 	}
 
@@ -43,5 +56,9 @@ public class ShopService {
 
 	public List<ShopEntity> findByNameLike(String name){
 		return shopRepository.findByNameContains(name);
+	}
+
+	public ShopEntity findByName(String name){
+		return shopRepository.findByName(name);
 	}
 }
