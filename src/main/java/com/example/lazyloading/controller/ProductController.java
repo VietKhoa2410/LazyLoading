@@ -24,17 +24,20 @@ public class ProductController {
     private final ShopService shopService;
 
     @GetMapping("{id}")
-    public String findNameById(@PathVariable Long id){
-        return productService.findById(id).getName();
-    }
-
-    @GetMapping("{id}/info")
-    public ProductInfo findInfoById(@PathVariable Long id){
+    public ProductInfo findNameById(@PathVariable Long id){
         return productService.findById(id, ProductInfo.class);
     }
 
     @GetMapping
-    public List<ProductDto> findByShopName(@RequestParam String name){
+    public List<ProductDto> findByShopNameLike(
+        @RequestParam String name, @RequestParam(required = false, defaultValue = "false") Boolean useDto){
+        if(useDto){
+            return findByShopNameLikeViaDto(name);
+        }
+        return directFindByShopNameLike(name);
+    }
+
+    private List<ProductDto> directFindByShopNameLike(String name){
         List<ShopEntity> shopEntities = shopService.findByNameLike(name);
         List<ProductDto> productDtos = new ArrayList<>();
         for(ShopEntity shopEntity : shopEntities) {
@@ -45,9 +48,21 @@ public class ProductController {
                         .name(product.getName())
                         .shopId(shopEntity.getId())
                         .shopName(shopEntity.getName())
-                    .build());
+                        .build());
             }
         }
         return productDtos;
     }
+
+    private List<ProductDto> findByShopNameLikeViaDto(String name){
+        return productService.findProductDtoByNameLike(name);
+    }
+
+    @GetMapping("info")
+    public List<ProductInfo> findInfoByShopNameLike(
+        @RequestParam String name){
+        return productService.findProductInfoByNameLike(name);
+    }
+
+
 }

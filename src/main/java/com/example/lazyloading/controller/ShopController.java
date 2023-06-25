@@ -1,7 +1,10 @@
 package com.example.lazyloading.controller;
 
+import com.example.lazyloading.model.product.dto.ProductDto;
+import com.example.lazyloading.model.product.entity.ProductEntity;
 import com.example.lazyloading.model.shop.dto.CreateShopRequest;
 import com.example.lazyloading.model.shop.dto.ShopInfo;
+import com.example.lazyloading.model.shop.entity.ShopEntity;
 import com.example.lazyloading.model.shop.service.ShopService;
 import com.example.lazyloading.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Log4j2
 @RestController
@@ -40,14 +44,23 @@ public class ShopController {
     return shopService.findInfoById(id);
   }
 
-  @GetMapping
-  public Long getIdByName(@RequestParam String name){
-    return shopService.findByName(name).getId();
-  }
-
   @ExceptionHandler(EntityNotFoundException.class)
   public String handleException(Exception e){
     log.error("Exception is found", e);
     return e.getMessage();
+  }
+
+  @GetMapping("{id}/product")
+  public List<ProductDto> getShopProduct(@PathVariable Long id){
+    ShopEntity shopEntity = shopService.findById(id);
+    List<ProductDto> productDtos = new ArrayList<>();
+    for (ProductEntity product : shopEntity.getProducts()) {
+      productDtos.add(
+          ProductDto.builder()
+              .id(product.getId())
+              .name(product.getName())
+              .build());
+      }
+    return productDtos;
   }
 }
