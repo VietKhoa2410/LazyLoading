@@ -2,9 +2,12 @@ package com.example.lazyloading.model.shop.entity;
 
 import com.example.lazyloading.model.product.entity.ProductEntity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.List;
 @Setter
 @Builder
 @FieldNameConstants
+@EntityListeners(AuditingEntityListener.class)
 @NamedEntityGraph(name = "Shop.products",
 	attributeNodes = @NamedAttributeNode("products")
 )
@@ -27,6 +31,9 @@ public class ShopEntity {
 
 	@Column(unique = true)
 	private String name;
+
+	@CreatedDate
+	private LocalDateTime createdAt;
 
 	@Builder.Default
 	@OneToMany(mappedBy = ProductEntity.Fields.shop, orphanRemoval = true,

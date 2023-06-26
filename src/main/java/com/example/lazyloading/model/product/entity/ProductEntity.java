@@ -30,7 +30,7 @@ public class ProductEntity {
 	private String name;
 
 	@CreatedDate
-	private LocalDateTime createAt;
+	private LocalDateTime createdAt;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "shop_id", nullable = false)
